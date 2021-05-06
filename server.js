@@ -35,17 +35,14 @@ app.get('/api/users', async (req, res) => {
 app.post('/api/users/:_id/exercises', async (req, res) => {
   const description = req.body.description;
   const duration = req.body.duration;
-  const date = new Date(req.body.date);
+  const date = req.body.date ? new Date(req.body.date) : new Date();
 
   const exercise = new Exercise({ description, duration, date, owner: req.params._id });
   await exercise.save();
 
   const user = await User.findById(req.params._id);
-  await user.populate({
-    path: 'exercises'
-  }).execPopulate();
 
-  res.send(user);
+  res.send({...user.toJSON(), ...exercise.toJSON()});
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
@@ -54,7 +51,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     path: 'exercises'
   }).execPopulate();
 
-  res.send({...user, log: user.exercises, count: user.exercises.length});
+  res.send({ ...user, log: user.exercises, count: user.exercises.length });
 });
 
 
