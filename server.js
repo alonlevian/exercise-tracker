@@ -51,7 +51,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     path: 'exercises'
   }).execPopulate();
 
-  res.send({ ...user, log: user.exercises, count: user.exercises.length });
+  res.send({ ...user.toJSON(), log: user.exercises, count: user.exercises.length });
 });
 
 

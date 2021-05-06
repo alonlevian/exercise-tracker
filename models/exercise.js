@@ -20,6 +20,16 @@ const exerciseSchema = new mongoose.Schema({
     }
 });
 
+exerciseSchema.methods.toJSON = function() {
+    const exercise = this.toObject();
+
+    delete exercise.__v;
+    delete exercise._id;
+    delete exercise.owner;
+
+    return exercise;
+}
+
 const Exercise = mongoose.model('Exercise', exerciseSchema);
 
 module.exports = Exercise;

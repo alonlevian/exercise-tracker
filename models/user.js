@@ -13,6 +13,14 @@ userSchema.virtual('exercises', {
     foreignField: 'owner'
 });
 
+userSchema.methods.toJSON = function() {
+    const user = this.toObject();
+
+    delete user.__v;
+
+    return user;
+}
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
