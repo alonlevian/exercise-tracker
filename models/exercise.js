@@ -26,7 +26,6 @@ exerciseSchema.methods.toJSON = function() {
     delete exercise.__v;
     delete exercise._id;
     delete exercise.owner;
-    exercise.date = exercise.date.toDateString();
 
     return exercise;
 }

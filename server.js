@@ -42,13 +42,25 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
   const user = await User.findById(req.params._id);
 
-  res.send({...user.toJSON(), ...exercise.toJSON()});
+  res.send({ ...user.toJSON(), description, duration, date: date.toDateString() });
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
   const user = await User.findById(req.params._id);
+
+  const match = {
+    date: {
+      $gte: req.query.from ? new Date(req.query.from) : new Date("1970-01-01"),
+      $lte: req.query.to ? new Date(req.query.to) : new Date()
+    }
+  };
+
   await user.populate({
-    path: 'exercises'
+    path: 'exercises',
+    options: {
+      limit: req.query.limit
+    },
+    match: match
   }).execPopulate();
 
   res.send({ ...user.toJSON(), log: user.exercises, count: user.exercises.length });
