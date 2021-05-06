@@ -42,7 +42,12 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
   const user = await User.findById(req.params._id);
 
-  res.send({ ...user.toJSON(), description, duration, date: date.toDateString() });
+  res.send({
+    ...user.toJSON(),
+    description: exercise.description,
+    duration: exercise.description,
+    date: exercise.date.toDateString()
+  });
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
